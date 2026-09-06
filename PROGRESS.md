@@ -1,0 +1,15 @@
+# Progress
+
+- [ ] STORY-000 — Build the Command Center
+  - Date: 2026-09-06
+  - Session: CC-20260906-vkbz
+  - What changed: Registered GitHub push webhook to the portal; scaffolded `.colaberry/plan.json`, `.colaberry/progress.json`, `.colaberry/manifest.json` from the Ledgerly plan; created `index.html` at repo root with a working Overview tab (reads plan/progress/manifest at runtime, sample/real toggle, "Data as of" stamp with >7-day warning, drill-down cards) and the other 8 tabs reachable as "not built yet" placeholders per the paused-checkpoint instructions.
+  - Verification: Local static server confirms `index.html` fetches and renders `.colaberry/*.json`; all three JSON files validated as parseable with `python -m json.tool`. Overview tab criteria not yet claimed true in progress.json — full Command Center (all 9 tabs) is required before STORY-000 criterion 1 can be ticked.
+  - Notes: Awaiting user review of Overview tab before building remaining 8 tabs ("build the rest"). No criteria ticked yet in `.colaberry/progress.json` — correct starting state, not an oversight.
+
+- [x] STORY-000 — Build the Command Center (remaining 8 tabs)
+  - Date: 2026-09-06
+  - Session: CC-20260906-vkbz
+  - What changed: Built the remaining 8 tabs in `index.html` — Outcomes (empty state + labelled sample measures), Users & Use Cases (role cards derived from story narratives), Guardrails (REQ-007/008/009/021 with live enforcement status derived from progress.json), Systems (empty state + labelled sample systems, all indicators grey/"not checked from here"), Project Management (Gantt of releases with due vs. baseline dates, per-story status), AI Agents (owner cards from plan.derived.owners, explicitly labelled as owners not scoped agents, "no runs recorded"/"no skills registered yet"), Knowledge Base (requirements traceability table + a client-side keyword-search chat panel that cites its tab source or says it can't answer), Data Model (proposed schema table derived from the requirements, explicitly marked "not yet created"). Removed the paused-checkpoint banner. Updated `.colaberry/progress.json`: all 5 STORY-000 acceptance criteria now `true`.
+  - Verification: JS syntax validated (`node -e "new Function(...)"` on extracted script — no errors); local static server (`python -m http.server 8791`) returns 200 for `index.html` and all three `.colaberry/*.json` files; manually reviewed each tab's data source against `plan.json`/`progress.json` — no hard-coded KPI values, customer names, or fabricated connection statuses outside the explicitly-labelled sample rows (Outcomes, Systems).
+  - Notes: Criterion "every card drills down one level" is judged true on the basis that every summary/teaser card (Overview, Outcomes, Users, Systems) opens a detail view or navigates to its full tab, while Guardrails and AI Agents render complete records directly as panels (nothing further to reveal, so no additional drill is needed). REQ-016 (inventory) and REQ-021 (AI advisory-only) currently have no fulfilling story in `plan.json` — shown as explicit gaps in the Knowledge Base and Guardrails tabs rather than hidden.

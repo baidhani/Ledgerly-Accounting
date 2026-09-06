@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ledgerly — Command Center</title>
+<style>
+  :root{
+    --brand: #1f4b3f;
+    --brand-light: #2f6e5b;
+    --accent: #c8952c;
+    --bg: #f6f5f1;
+    --panel: #ffffff;
+    --border: #e2e0d8;
+    --text: #1c1c1a;
+    --muted: #6b6a63;
+    --danger: #b3441e;
+    --ok: #2f6e5b;
+    --warn: #b3441e;
+    --grey: #9a988f;
+    font-size: 15px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+  header.app-header{
+    background: var(--brand);
+    color: #fff;
+    padding: 18px 28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  header.app-header h1{
+    margin:0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+  header.app-header .descriptor{
+    margin: 2px 0 0;
+    font-size: 0.85rem;
+    color: #d9e6e0;
+    max-width: 640px;
+  }
+  .toggle-wrap{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background: rgba(255,255,255,0.12);
+    padding: 6px 10px;
+    border-radius: 8px;
+  }
+  .toggle-wrap label{ font-size:0.78rem; color:#fff; }
+  .switch{ position:relative; width:44px; height:22px; }
+  .switch input{ opacity:0; width:0; height:0; }
+  .slider{
+    position:absolute; cursor:pointer; inset:0;
+    background:#8fae9f; border-radius:22px; transition:0.15s;
+  }
+  .slider:before{
+    content:""; position:absolute; height:16px; width:16px; left:3px; top:3px;
+    background:#fff; border-radius:50%; transition:0.15s;
+  }
+  input:checked + .slider{ background: var(--accent); }
+  input:checked + .slider:before{ transform: translateX(22px); }
+
+  nav.tabs{
+    display:flex;
+    flex-wrap:wrap;
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    position: sticky;
+    top:0;
+    z-index: 10;
+  }
+  nav.tabs button{
+    background:none;
+    border:none;
+    padding: 12px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor:pointer;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+  }
+  nav.tabs button.active{
+    color: var(--brand);
+    border-bottom-color: var(--accent);
+  }
+  nav.tabs button:hover{ color: var(--brand); }
+
+  main{ padding: 22px 28px 60px; max-width: 1180px; margin: 0 auto; }
+
+  .stamp{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+  }
+  .stamp.warn{ color: var(--warn); border-color: var(--warn); background: #fbeee7; }
+  .dot{ width:8px; height:8px; border-radius:50%; background: var(--grey); display:inline-block; }
+  .dot.ok{ background: var(--ok); }
+  .dot.warn{ background: var(--warn); }
+  .dot.grey{ background: var(--grey); }
+
+  .sample-flag{
+    display:inline-block;
+    font-size: 0.68rem;
+    font-weight:700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #8a5a00;
+    background: #fdf1d6;
+    border: 1px solid #ecd8a0;
+    padding: 2px 8px;
+    border-radius: 5px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .cards{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px;
+    margin-bottom: 26px;
+  }
+  .card{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    cursor: pointer;
+    transition: box-shadow 0.15s, transform 0.15s;
+  }
+  .card:hover{ box-shadow: 0 4px 14px rgba(0,0,0,0.06); transform: translateY(-1px); }
+  .card h3{ margin:0 0 6px; font-size:0.82rem; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:0.4px; }
+  .card .big{ font-size: 1.7rem; font-weight:700; color: var(--brand); }
+  .card .sub{ font-size:0.82rem; color:var(--muted); margin-top:4px; }
+
+  .panel{
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 20px;
+  }
+  .panel h2{ margin-top:0; font-size:1.05rem; color: var(--brand); }
+  .panel h3.sub-heading{ font-size:0.9rem; color: var(--muted); margin: 18px 0 8px; text-transform:uppercase; letter-spacing:0.4px; }
+
+  .empty-state{
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 34px 22px;
+    text-align:center;
+    color: var(--muted);
+    background: #fbfaf7;
+  }
+  .empty-state strong{ display:block; color: var(--text); margin-bottom:6px; font-size:1rem; }
+
+  .banner{
+    background: #fdf1d6;
+    border: 1px solid #ecd8a0;
+    color: #6b4e00;
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+  }
+  .banner strong{ display:block; margin-bottom:2px; }
+
+  .detail-overlay{
+    position: fixed; inset:0; background: rgba(20,20,18,0.45);
+    display:flex; align-items:flex-start; justify-content:center;
+    padding: 6vh 20px; z-index: 100; overflow-y:auto;
+  }
+  .detail-overlay[hidden]{ display:none; }
+  .detail-box{
+    background: var(--panel); border-radius: 12px; max-width: 680px; width:100%;
+    padding: 26px; position:relative;
+  }
+  .detail-box h2{ margin-top:0; color:var(--brand); }
+  .detail-close{
+    position:absolute; top:14px; right:16px; border:none; background:none;
+    font-size:1.3rem; cursor:pointer; color: var(--muted);
+  }
+  .kv{ display:flex; justify-content:space-between; gap: 14px; padding:6px 0; border-bottom:1px solid var(--border); font-size:0.9rem; }
+  .kv:last-child{ border-bottom:none; }
+  .kv .k{ color: var(--muted); }
+  ul.plain{ padding-left: 18px; margin: 8px 0; }
+  ul.plain li{ margin-bottom: 4px; font-size: 0.88rem; }
+
+  table.data-table{ width:100%; border-collapse: collapse; font-size: 0.85rem; }
+  table.data-table th, table.data-table td{ text-align:left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  table.data-table th{ color: var(--muted); font-weight:600; text-transform:uppercase; font-size:0.7rem; letter-spacing:0.3px; }
+  table.data-table tr:hover td{ background: #fbfaf7; }
+  .table-scroll{ overflow-x:auto; }
+
+  .pill{ display:inline-block; padding: 2px 8px; border-radius: 12px; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.3px; }
+  .pill.verified{ background:#e2f0e9; color: var(--ok); }
+  .pill.submitted{ background:#fdf1d6; color:#8a5a00; }
+  .pill.in_progress{ background:#e6ecf5; color:#2c4a86; }
+  .pill.not_started{ background:#efece5; color: var(--muted); }
+  .pill.must{ background:#f6e3db; color: var(--danger); }
+  .pill.should{ background:#eef0e8; color: var(--brand-light); }
+
+  .gantt-row{ display:flex; align-items:center; gap: 10px; margin-bottom:10px; font-size:0.82rem; }
+  .gantt-label{ width: 230px; flex-shrink:0; color: var(--text); font-weight:600; }
+  .gantt-track{ flex:1; background:#efece5; border-radius:6px; height: 18px; position:relative; }
+  .gantt-bar{ position:absolute; top:0; bottom:0; background: var(--brand-light); border-radius:6px; }
+  .gantt-bar.demo{ background: var(--accent); }
+  .gantt-dates{ width:170px; flex-shrink:0; color: var(--muted); font-size:0.76rem; text-align:right; }
+
+  .agent-card{ background: var(--panel); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:14px; }
+  .agent-card h3{ margin:0 0 6px; color: var(--brand); font-size:1rem; }
+  .agent-card .meta{ font-size:0.78rem; color:var(--muted); margin-bottom:8px; }
+
+  .kb-chat{ border:1px solid var(--border); border-radius:10px; padding:16px; background:#fbfaf7; margin-top: 10px; }
+  .kb-chat input[type=text]{ width:100%; padding:9px 12px; border:1px solid var(--border); border-radius:8px; font-size:0.88rem; }
+  .kb-chat button{ margin-top:8px; background: var(--brand); color:#fff; border:none; padding:8px 16px; border-radius:8px; cursor:pointer; font-size:0.82rem; font-weight:600; }
+  .kb-answer{ margin-top:12px; font-size:0.88rem; background:#fff; border:1px solid var(--border); border-radius:8px; padding:12px; }
+  .kb-answer .cite{ color: var(--muted); font-size:0.75rem; margin-top:6px; }
+
+  footer{
+    text-align:center; color: var(--muted); font-size:0.75rem; padding: 20px; opacity:0.8;
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div>
+    <h1 id="proj-name">Ledgerly</h1>
+    <p class="descriptor" id="proj-descriptor">Loading project description…</p>
+  </div>
+  <div class="toggle-wrap">
+    <label for="sample-toggle">Sample</label>
+    <label class="switch">
+      <input type="checkbox" id="sample-toggle" checked>
+      <span class="slider"></span>
+    </label>
+    <label for="sample-toggle">Real</label>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs"></nav>
+
+<main>
+  <div class="stamp" id="data-stamp"><span class="dot"></span> Loading data timestamp…</div>
+  <div id="tab-content"></div>
+</main>
+
+<footer>Ledgerly Command Center — data reflects the last sync from GitHub, not a live production feed.</footer>
+
+<div class="detail-overlay" id="detail-overlay" hidden>
+  <div class="detail-box">
+    <button class="detail-close" id="detail-close" aria-label="Close">&times;</button>
+    <div id="detail-content"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const TABS = [
+    { id: "overview", label: "Overview" },
+    { id: "outcomes", label: "Outcomes" },
+    { id: "users", label: "Users & Use Cases" },
+    { id: "guardrails", label: "Guardrails" },
+    { id: "systems", label: "Systems" },
+    { id: "pm", label: "Project Management" },
+    { id: "agents", label: "AI Agents" },
+    { id: "kb", label: "Knowledge Base" },
+    { id: "datamodel", label: "Data Model" }
+  ];
+
+  const state = {
+    plan: null,
+    progress: null,
+    manifest: null,
+    sample: true,
+    tab: "overview"
+  };
+
+  function $(sel, root){ return (root||document).querySelector(sel); }
+  function el(tag, attrs, children){
+    const node = document.createElement(tag);
+    if(attrs) Object.keys(attrs).forEach(k=>{
+      if(k === "class") node.className = attrs[k];
+      else if(k === "html") node.innerHTML = attrs[k];
+      else node.setAttribute(k, attrs[k]);
+    });
+    (children||[]).forEach(c=>{ if(c) node.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return node;
+  }
+
+  async function fetchJson(path){
+    try{
+      const res = await fetch(path, { cache: "no-store" });
+      if(!res.ok) return null;
+      return await res.json();
+    }catch(e){
+      return null;
+    }
+  }
+
+  function fmtDate(iso){
+    if(!iso) return "unknown";
+    const d = new Date(iso);
+    if(isNaN(d)) return iso;
+    return d.toLocaleDateString(undefined, { year:"numeric", month:"long", day:"numeric" });
+  }
+
+  function relativeAge(iso){
+    if(!iso) return { label: "unknown", days: Infinity };
+    const then = new Date(iso).getTime();
+    const now = Date.now();
+    const diffMs = now - then;
+    const days = Math.floor(diffMs / 86400000);
+    if(days <= 0) return { label: "today", days: 0 };
+    if(days === 1) return { label: "1 day ago", days: 1 };
+    return { label: days + " days ago", days: days };
+  }
+
+  function renderStamp(){
+    const wrap = $("#data-stamp");
+    if(!state.manifest || !state.manifest.generated_at){
+      wrap.className = "stamp warn";
+      wrap.innerHTML = '<span class="dot warn"></span> No .colaberry/manifest.json found — sync from the portal to produce one.';
+      return;
+    }
+    const iso = state.manifest.generated_at;
+    const age = relativeAge(iso);
+    const isOld = age.days > 7;
+    wrap.className = "stamp" + (isOld ? " warn" : "");
+    let html = '<span class="dot ' + (isOld ? "warn" : "ok") + '"></span> Data as of ' + fmtDate(iso) + " (" + age.label + ")";
+    if(isOld) html += " — sync from the portal to refresh.";
+    wrap.innerHTML = html;
+  }
+
+  function renderTabs(){
+    const nav = $("#tabs");
+    nav.innerHTML = "";
+    TABS.forEach(t=>{
+      const btn = el("button", { class: t.id === state.tab ? "active" : "" }, [t.label]);
+      btn.addEventListener("click", ()=>{ state.tab = t.id; renderAll(); });
+      nav.appendChild(btn);
+    });
+  }
+
+  function sampleFlag(text){
+    return el("span", { class: "sample-flag" }, [text || "Sample data"]);
+  }
+
+  function openDetail(title, bodyNode){
+    const overlay = $("#detail-overlay");
+    const content = $("#detail-content");
+    content.innerHTML = "";
+    content.appendChild(el("h2", {}, [title]));
+    content.appendChild(bodyNode);
+    overlay.hidden = false;
+  }
+  $("#detail-close").addEventListener("click", ()=>{ $("#detail-overlay").hidden = true; });
+  $("#detail-overlay").addEventListener("click", (e)=>{ if(e.target.id === "detail-overlay") $("#detail-overlay").hidden = true; });
+
+  function storyById(id){
+    return (state.plan && state.plan.stories || []).find(s=>s.id === id);
+  }
+  function verificationFor(id){
+    const row = (state.progress && state.progress.stories || []).find(s=>s.id === id);
+    return row && row.verification ? row.verification : { state: "not_started", commit: null, points: 0 };
+  }
+  function pill(stateName){
+    const label = (stateName || "not_started").replace("_", " ");
+    return el("span", { class: "pill " + (stateName || "not_started") }, [label]);
+  }
+
+  function storyDetailBody(story){
+    const v = verificationFor(story.id);
+    const body = el("div", {});
+    body.appendChild(el("div", { class: "kv" }, [el("span", {class:"k"}, ["Release"]), el("span", {}, [story.release])]));
+    body.appendChild(el("div", { class: "kv" }, [el("span", {class:"k"}, ["Due"]), el("span", {}, [fmtDate(story.due_on) + (story.due_on !== story.due_baseline_on ? " (originally " + fmtDate(story.due_baseline_on) + ")" : "")])]));
+    body.appendChild(el("div", { class: "kv" }, [el("span", {class:"k"}, ["Status"]), pill(v.state)]));
+    body.appendChild(el("div", { class: "kv" }, [el("span", {class:"k"}, ["Commit"]), el("span", {}, [v.commit || "none yet"])]));
+    body.appendChild(el("p", { }, [story.narrative]));
+    if(story.acceptance_criteria && story.acceptance_criteria.length){
+      const ul = el("ul", { class: "plain" });
+      story.acceptance_criteria.forEach(c=>ul.appendChild(el("li", {}, [c])));
+      body.appendChild(el("h3", { class: "sub-heading" }, ["Acceptance criteria"]));
+      body.appendChild(ul);
+    }
+    return body;
+  }
+
+  // ---------- Overview ----------
+  function renderOverview(container){
+    const plan = state.plan;
+    const progress = state.progress;
+
+    if(!plan || !progress){
+      container.appendChild(el("div", { class: "empty-state" }, [
+        el("strong", {}, ["No plan or progress data found"]),
+        "This tab reads .colaberry/plan.json and .colaberry/progress.json at runtime. Sync from the portal to produce them."
+      ]));
+      return;
+    }
+
+    const proj = plan.project || {};
+    $("#proj-name").textContent = proj.name || "Ledgerly";
+    $("#proj-descriptor").textContent = proj.descriptor || "";
+
+    const sched = plan.schedule || {};
+    const totals = progress.totals || {};
+
+    const scheduleCard = el("div", { class: "panel" }, []);
+    scheduleCard.appendChild(el("h2", {}, ["Where we are"]));
+    const kvWrap = el("div", {});
+    [
+      ["Build starts", fmtDate(sched.build_start)],
+      ["Build ends", fmtDate(sched.build_end)],
+      ["Demo day", fmtDate(sched.demo_day)],
+      ["Demo release", sched.demo_release_key || "—"]
+    ].forEach(([k,v])=>{
+      kvWrap.appendChild(el("div", { class: "kv" }, [el("span", {class:"k"}, [k]), el("span", {}, [v])]));
+    });
+    scheduleCard.appendChild(kvWrap);
+    container.appendChild(scheduleCard);
+
+    const cards = el("div", { class: "cards" });
+
+    const c1 = el("div", { class: "card" }, [
+      el("h3", {}, ["Stories verified"]),
+      el("div", { class: "big" }, [(totals.stories_verified ?? 0) + " / " + (totals.stories_total ?? "—")]),
+      el("div", { class: "sub" }, ["Click for the full release breakdown"])
+    ]);
+    c1.addEventListener("click", ()=>{ state.tab = "pm"; renderAll(); });
+    cards.appendChild(c1);
+
+    const c2 = el("div", { class: "card" }, [
+      el("h3", {}, ["Criteria passed"]),
+      el("div", { class: "big" }, [(totals.criteria_passed ?? 0) + " / " + (totals.criteria_total ?? "—")]),
+      el("div", { class: "sub" }, ["This story's own acceptance criteria"])
+    ]);
+    c2.addEventListener("click", ()=>{
+      const s000 = (progress.stories || []).find(s=>s.id === "STORY-000");
+      const body = el("div", {});
+      if(s000 && s000.criteria){
+        const list = el("ul", { class: "plain" });
+        s000.criteria.forEach(c=>{
+          list.appendChild(el("li", {}, [(c.passed ? "✅ " : "☐ ") + c.text]));
+        });
+        body.appendChild(list);
+      } else {
+        body.appendChild(el("p", {}, ["No STORY-000 criteria found in progress.json."]));
+      }
+      openDetail("STORY-000 acceptance criteria", body);
+    });
+    cards.appendChild(c2);
+
+    const c3 = el("div", { class: "card" }, [
+      el("h3", {}, ["Points awarded"]),
+      el("div", { class: "big" }, [String(totals.points_awarded ?? 0)]),
+      el("div", { class: "sub" }, ["Summed from progress.json, not recomputed here"])
+    ]);
+    c3.addEventListener("click", ()=>{
+      openDetail("Points awarded", el("p", {}, ["This total is read directly from progress.totals.points_awarded and is not recalculated by looping the stories, so it always agrees with the source file."]));
+    });
+    cards.appendChild(c3);
+
+    container.appendChild(cards);
+  }
+
+  // ---------- Outcomes ----------
+  const SAMPLE_MEASURES = [
+    { id: "SAMPLE-M1", statement: "Reduce month-end close time from 10 business days to 3." },
+    { id: "SAMPLE-M2", statement: "Cut manual journal-entry errors caught in audit by 80%." },
+    { id: "SAMPLE-M3", statement: "Get a first-pass trial balance available same-day instead of next-day." }
+  ];
+  function renderOutcomes(container){
+    const measures = state.plan.derived.measures || [];
+    if(measures.length === 0 && !state.sample){
+      container.appendChild(el("div", { class: "empty-state" }, [
+        el("strong", {}, ["No outcome measures defined yet"]),
+        "Your plan does not carry a numeric target yet. Once measures are added to plan.derived.measures, they will render here — one card per measure."
+      ]));
+      return;
+    }
+    const list = measures.length ? measures : SAMPLE_MEASURES;
+    if(measures.length === 0){
+      container.appendChild(el("p", {}, ["No real measures defined yet. Showing illustrative examples so you can see the shape:", sampleFlag()]));
+    }
+    const cards = el("div", { class: "cards" });
+    list.forEach(m=>{
+      const card = el("div", { class: "card" }, [
+        el("h3", {}, [m.id, measures.length ? null : sampleFlag("Sample")]),
+        el("div", { class: "sub", html: "" }, [m.statement])
+      ]);
+      card.addEventListener("click", ()=>{
+        openDetail(m.id, el("p", {}, [m.statement + (measures.length ? "" : " (illustrative — not a real target yet)")]));
+      });
+      cards.appendChild(card);
+    });
+    container.appendChild(cards);
+  }
+
+  // ---------- Users & use cases ----------
+  function renderUsers(container){
+    const roles = state.plan.derived.roles || [];
+    if(roles.length === 0){
+      container.appendChild(el("div", { class: "empty-state" }, [ el("strong", {}, ["No roles found"]), "Roles are extracted from story narratives." ]));
+      return;
+    }
+    const cards = el("div", { class: "cards" });
+    roles.forEach(role=>{
+      const stories = (state.plan.stories || []).filter(s=>s.narrative.toLowerCase().startsWith("as a " + role.toLowerCase()) || s.narrative.toLowerCase().startsWith("as an " + role.toLowerCase()));
+      const card = el("div", { class: "card" }, [
+        el("h3", {}, [role]),
+        el("div", { class: "big" }, [String(stories.length)]),
+        el("div", { class: "sub" }, [stories.length === 1 ? "story" : "stories"])
+      ]);
+      card.addEventListener("click", ()=>{
+        const body = el("div", {});
+        const ul = el("ul", { class: "plain" });
+        stories.forEach(s=>ul.appendChild(el("li", {}, [s.narrative + "  [" + s.id + "]"])));
+        body.appendChild(ul.childNodes.length ? ul : el("p", {}, ["No stories found for this role."]));
+        openDetail(role, body);
+      });
+      cards.appendChild(card);
+    });
+    container.appendChild(cards);
+  }
+
+  // ---------- Guardrails ----------
+  function renderGuardrails(container){
+    const guardrails = state.plan.derived.guardrails || [];
+    if(guardrails.length === 0){
+      container.appendChild(el("div", { class: "empty-state" }, [ el("strong", {}, ["No SAFE requirements defined"]), "Worth fixing before building further — a system with no guardrails has no promises to keep." ]));
+      return;
+    }
+    guardrails.forEach(g=>{
+      const req = (state.plan.requirements || []).find(r=>r.id === g.id) || { fulfilled_by: [] };
+      const storyIds = req.fulfilled_by || [];
+      let statusLabel, statusClass;
+      if(storyIds.length === 0){
+        statusLabel = "Gap — no story implements this yet";
+        statusClass = "not_started";
+      } else {
+        const states = storyIds.map(id=>verificationFor(id).state);
+        if(states.every(s=>s === "verified")){ statusLabel = "Enforced — verified"; statusClass = "verified"; }
+        else { statusLabel = "Promised, not yet kept"; statusClass = "in_progress"; }
+      }
+      const panel = el("div", { class: "panel" }, [
+        el("h2", {}, [g.id]),
+        el("p", {}, [g.statement]),
+        el("div", {}, [pill(statusClass), " ", statusLabel])
+      ]);
+      if(storyIds.length){
+        const ul = el("ul", { class: "plain" });
+        storyIds.forEach(id=>{
+          const s = storyById(id);
+          if(s) ul.appendChild(el("li", {}, [s.title + " — " + verificationFor(id).state]));
+        });
+        panel.appendChild(ul);
+      }
+      container.appendChild(panel);
+    });
+  }
+
+  // ---------- Systems ----------
+  const SAMPLE_SYSTEMS = ["QuickBooks (legacy migration source)", "Stripe", "Plaid"];
+  function renderSystems(container){
+    const systems = state.plan.derived.systems || [];
+    if(systems.length === 0 && !state.sample){
+      container.appendChild(el("div", { class: "empty-state" }, [ el("strong", {}, ["No external systems named yet"]), "Your plan names no external system. Once one is added to plan.derived.systems, its connection status will render here — grey until your own running system reports otherwise." ]));
+      return;
+    }
+    const list = systems.length ? systems : SAMPLE_SYSTEMS;
+    if(!systems.length) container.appendChild(el("p", {}, ["No real systems named yet. Showing illustrative examples: ", sampleFlag()]));
+    const cards = el("div", { class: "cards" });
+    list.forEach(name=>{
+      cards.appendChild(el("div", { class: "card" }, [
+        el("h3", {}, [name]),
+        el("div", {}, [el("span", { class: "dot grey" }), " not checked from here"])
+      ]));
+    });
+    container.appendChild(cards);
+  }
+
+  // ---------- Project management ----------
+  function renderPM(container){
+    const releases = state.plan.releases || [];
+    const sched = state.plan.schedule || {};
+    if(releases.length === 0){
+      container.appendChild(el("div", { class: "empty-state" }, [ el("strong", {}, ["No releases defined"]) ]));
+      return;
+    }
+    const allStart = new Date(releases[0].starts_on).getTime();
+    const allEnd = new Date(releases[releases.length-1].ends_on).getTime();
+    const span = Math.max(allEnd - allStart, 1);
+
+    const ganttPanel = el("div", { class: "panel" });
+    ganttPanel.appendChild(el("h2", {}, ["Releases"]));
+    releases.forEach(r=>{
+      const s = new Date(r.starts_on).getTime();
+      const e = new Date(r.ends_on).getTime();
+      const leftPct = ((s - allStart) / span) * 100;
+      const widthPct = Math.max(((e - s) / span) * 100, 3);
+      const row = el("div", { class: "gantt-row" });
+      row.appendChild(el("div", { class: "gantt-label" }, [r.name + (r.is_demo_target ? " (demo target)" : "")]));
+      const track = el("div", { class: "gantt-track" });
+      const bar = el("div", { class: "gantt-bar" + (r.is_demo_target ? " demo" : ""), style: "left:" + leftPct + "%; width:" + widthPct + "%;" });
+      bar.setAttribute("style", "left:" + leftPct + "%; width:" + widthPct + "%;");
+      track.appendChild(bar);
+      row.appendChild(track);
+      row.appendChild(el("div", { class: "gantt-dates" }, [fmtDate(r.starts_on) + " – " + fmtDate(r.ends_on)]));
+      ganttPanel.appendChild(row);
+    });
+    ganttPanel.appendChild(el("p", { class: "sub" }, ["Demo day: " + fmtDate(sched.demo_day) + ". Releases after " + (sched.demo_release_key || "the demo target") + " are the roadmap, not this term's work."]));
+    container.appendChild(ganttPanel);
+
+    releases.forEach(r=>{
+      const panel = el("div", { class: "panel" });
+      panel.appendChild(el("h2", {}, [r.name]));
+      const table = el("table", { class: "data-table" });
+      const thead = el("tr", {}, [el("th", {}, ["Story"]), el("th", {}, ["Due"]), el("th", {}, ["Status"])]);
+      table.appendChild(thead);
+      r.story_ids.forEach(id=>{
+        const s = storyById(id);
+        if(!s) return;
+        const v = verificationFor(id);
+        const dueCell = el("td", {}, [fmtDate(s.due_on) + (s.due_on !== s.due_baseline_on ? " (was " + fmtDate(s.due_baseline_on) + ")" : "")]);
+        const tr = el("tr", {}, [el("td", {}, [s.title]), dueCell, el("td", {}, [pill(v.state)])]);
+        tr.style.cursor = "pointer";
+        tr.addEventListener("click", ()=>openDetail(s.id + " — " + s.title, storyDetailBody(s)));
+        table.appendChild(tr);
+      });
+      const scroll = el("div", { class: "table-scroll" }, [table]);
+      panel.appendChild(scroll);
+      container.appendChild(panel);
+    });
+  }
+
+  // ---------- AI agents ----------
+  function renderAgents(container){
+    const owners = state.plan.derived.owners || [];
+    if(owners.length === 0){
+      container.appendChild(el("div", { class: "empty-state" }, [ el("strong", {}, ["No owners defined"]) ]));
+      return;
+    }
+    container.appendChild(el("p", { class: "sub" }, ["These are story owners, not scoped AI agents yet — no agent has run, so there is no run history or success rate to show."]));
+    owners.forEach(o=>{
+      const card = el("div", { class: "agent-card" });
+      card.appendChild(el("h3", {}, [o.name]));
+      card.appendChild(el("div", { class: "meta" }, ["Owns " + o.story_ids.length + " " + (o.story_ids.length === 1 ? "story" : "stories") + " · no runs recorded · no skills registered yet"]));
+      const ul = el("ul", { class: "plain" });
+      o.story_ids.forEach(id=>{
+        const s = storyById(id);
+        if(s) ul.appendChild(el("li", {}, [s.title]));
+      });
+      card.appendChild(ul);
+      container.appendChild(card);
+    });
+  }
+
+  // ---------- Knowledge base ----------
+  function kbSearch(query){
+    const q = query.toLowerCase().trim();
+    if(!q) return null;
+    const hits = [];
+    (state.plan.requirements || []).forEach(r=>{
+      if(r.id.toLowerCase() === q || r.statement.toLowerCase().includes(q)){
+        hits.push({ text: r.id + ": " + r.statement, source: "Knowledge base — Requirements" });
+      }
+    });
+    (state.plan.stories || []).forEach(s=>{
+      if(s.id.toLowerCase() === q || s.title.toLowerCase().includes(q) || s.narrative.toLowerCase().includes(q)){
+        hits.push({ text: s.id + ": " + s.title + " — " + s.narrative, source: "Project Management — " + s.release });
+      }
+    });
+    (state.plan.derived.guardrails || []).forEach(g=>{
+      if(g.statement.toLowerCase().includes(q)){
+        hits.push({ text: g.id + ": " + g.statement, source: "Guardrails" });
+      }
+    });
+    return hits;
+  }
+
+  function renderKB(container){
+    const reqs = state.plan.requirements || [];
+    const panel = el("div", { class: "panel" });
+    panel.appendChild(el("h2", {}, ["Requirements traceability"]));
+    const table = el("table", { class: "data-table" });
+    table.appendChild(el("tr", {}, [el("th", {}, ["ID"]), el("th", {}, ["Statement"]), el("th", {}, ["Priority"]), el("th", {}, ["Fulfilled by"]), el("th", {}, ["Status"])]));
+    reqs.forEach(r=>{
+      const storyIds = r.fulfilled_by || [];
+      let statusCell;
+      if(storyIds.length === 0){
+        statusCell = pill("not_started");
+        statusCell.textContent = "gap";
+      } else {
+        const states = storyIds.map(id=>verificationFor(id).state);
+        statusCell = states.every(s=>s==="verified") ? pill("verified") : pill("in_progress");
+      }
+      const tr = el("tr", {}, [
+        el("td", {}, [r.id]),
+        el("td", {}, [r.statement]),
+        el("td", {}, [pill(r.priority)]),
+        el("td", {}, [storyIds.length ? storyIds.join(", ") : "—"]),
+        el("td", {}, [statusCell])
+      ]);
+      if(r.priority === "must" && storyIds.length === 0) tr.style.background = "#fbeee7";
+      table.appendChild(tr);
+    });
+    panel.appendChild(el("div", { class: "table-scroll" }, [table]));
+    container.appendChild(panel);
+
+    const chat = el("div", { class: "kb-chat" });
+    chat.appendChild(el("h3", { class: "sub-heading" }, ["Ask about this project"]));
+    const input = el("input", { type: "text", placeholder: "e.g. audit trail, STORY-005, multi-company" });
+    const btn = el("button", {}, ["Ask"]);
+    const answerBox = el("div", {});
+    btn.addEventListener("click", ()=>{
+      const hits = kbSearch(input.value);
+      answerBox.innerHTML = "";
+      if(!hits || hits.length === 0){
+        answerBox.appendChild(el("div", { class: "kb-answer" }, ["I can't answer that from the data on this page. Try a requirement id, story id, or a keyword from a requirement statement."]));
+        return;
+      }
+      hits.slice(0, 5).forEach(h=>{
+        answerBox.appendChild(el("div", { class: "kb-answer" }, [h.text, el("div", { class: "cite" }, ["Source: " + h.source])]));
+      });
+    });
+    chat.appendChild(input);
+    chat.appendChild(btn);
+    chat.appendChild(answerBox);
+    container.appendChild(chat);
+  }
+
+  // ---------- Data model ----------
+  const DATA_MODEL_TABLES = [
+    { name: "Company", fields: "id, legal_name, fiscal_year_start, base_currency", relates: "has many Account, User, JournalEntry" },
+    { name: "Account", fields: "id, company_id, code, name, type (asset/liability/equity/revenue/expense)", relates: "belongs to Company; referenced by JournalLine" },
+    { name: "JournalEntry", fields: "id, company_id, entry_date, memo, created_by, posted_at", relates: "has many JournalLine; produces AuditLogEntry on change" },
+    { name: "JournalLine", fields: "id, journal_entry_id, account_id, debit_amount, credit_amount", relates: "belongs to JournalEntry and Account" },
+    { name: "AuditLogEntry", fields: "id, entity_type, entity_id, action, actor, before_value, after_value, occurred_at", relates: "references any auditable entity (REQ-007)" },
+    { name: "Customer", fields: "id, company_id, name, contact_info, payment_terms", relates: "belongs to Company; has many Invoice" },
+    { name: "Vendor", fields: "id, company_id, name, contact_info, payment_terms", relates: "belongs to Company; has many Bill" },
+    { name: "Invoice", fields: "id, customer_id, issue_date, due_date, status, total_amount", relates: "belongs to Customer; has many Payment" },
+    { name: "Bill", fields: "id, vendor_id, issue_date, due_date, status, total_amount", relates: "belongs to Vendor; has many Payment" },
+    { name: "Payment", fields: "id, invoice_id or bill_id, amount, paid_on, method", relates: "applies against Invoice or Bill" },
+    { name: "BankTransaction", fields: "id, company_id, posted_on, amount, description, reconciled_journal_line_id", relates: "reconciles against JournalLine" },
+    { name: "CostCenter", fields: "id, company_id, name, budget_amount, period", relates: "referenced by JournalLine for variance reporting" },
+    { name: "Role", fields: "id, name, permissions (json)", relates: "assigned to User" },
+    { name: "User", fields: "id, company_id, name, email, role_id", relates: "belongs to Company and Role" },
+    { name: "AIInsight", fields: "id, company_id, generated_at, summary, source_data_ref, is_advisory (always true)", relates: "read-only; never writes to JournalEntry (REQ-021)" }
+  ];
+  function renderDataModel(container){
+    container.appendChild(el("div", { class: "banner" }, [
+      el("strong", {}, ["Proposed model — not yet created"]),
+      "This is a starting point derived from the requirements, not a final schema. Review it before any table gets created."
+    ]));
+    const panel = el("div", { class: "panel" });
+    const table = el("table", { class: "data-table" });
+    table.appendChild(el("tr", {}, [el("th", {}, ["Table"]), el("th", {}, ["Fields"]), el("th", {}, ["Relationships"])]));
+    DATA_MODEL_TABLES.forEach(t=>{
+      table.appendChild(el("tr", {}, [el("td", {}, [t.name]), el("td", {}, [t.fields]), el("td", {}, [t.relates])]));
+    });
+    panel.appendChild(el("div", { class: "table-scroll" }, [table]));
+    container.appendChild(panel);
+  }
+
+  function renderAll(){
+    renderTabs();
+    renderStamp();
+    const content = $("#tab-content");
+    content.innerHTML = "";
+    const tabDef = TABS.find(t=>t.id === state.tab);
+    const dispatch = {
+      overview: renderOverview,
+      outcomes: renderOutcomes,
+      users: renderUsers,
+      guardrails: renderGuardrails,
+      systems: renderSystems,
+      pm: renderPM,
+      agents: renderAgents,
+      kb: renderKB,
+      datamodel: renderDataModel
+    };
+    if(!state.plan || !state.progress){
+      content.appendChild(el("div", { class: "empty-state" }, [ el("strong", {}, ["No plan/progress data found"]), "Sync from the portal to produce .colaberry/plan.json and .colaberry/progress.json." ]));
+      return;
+    }
+    (dispatch[state.tab] || renderOverview)(content);
+  }
+
+  $("#sample-toggle").addEventListener("change", (e)=>{
+    state.sample = e.target.checked;
+    renderAll();
+  });
+
+  async function init(){
+    const [plan, progress, manifest] = await Promise.all([
+      fetchJson(".colaberry/plan.json"),
+      fetchJson(".colaberry/progress.json"),
+      fetchJson(".colaberry/manifest.json")
+    ]);
+    state.plan = plan;
+    state.progress = progress;
+    state.manifest = manifest;
+    renderAll();
+  }
+
+  init();
+})();
+</script>
+
+</body>
+</html>
