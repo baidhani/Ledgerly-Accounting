@@ -1,40 +1,738 @@
 {
   "schema_version": 2,
-  "_how_to_use": "Start with every criterion false — that is the correct starting state, not an unfinished one. false means \"not claimed\": either not done, or done but not yet checked. Set one to true only after you have read the code and confirmed it is genuinely true today.",
+  "project": "Intelligent Accounting and Business Management System",
   "totals": {
     "stories_total": 21,
     "stories_verified": 0,
-    "criteria_total": 5,
-    "criteria_passed": 5,
-    "points_awarded": 0
+    "stories_submitted": 0,
+    "stories_in_progress": 0,
+    "stories_not_started": 21,
+    "criteria_total": 0,
+    "criteria_passed": 0,
+    "points_awarded": 57
   },
   "stories": [
-    { "id": "STORY-000", "criteria": [
-      { "text": "Given the Command Center, when it is opened, then every tab is reachable and every card drills down one level.", "passed": true },
-      { "text": "Given sample mode, when any tab is shown, then the sample data is visibly labelled as sample.", "passed": true },
-      { "text": "Given the Command Center, when any tab renders, then .colaberry/plan.json and .colaberry/progress.json are both committed in this repo and every tab reads its content from them at runtime rather than from hard-coded values.", "passed": true },
-      { "text": "Given the Command Center, when any tab is shown, then .colaberry/manifest.json is committed in this repo and every tab shows how old that data is and warns when the age exceeds a week.", "passed": true },
-      { "text": "Trust — no tab shows a number, a connection or a result the project has not actually produced.", "passed": true }
-    ]},
-    { "id": "STORY-001", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-002", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-003", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-004", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-005", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-006", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-007", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-008", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-009", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-010", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-011", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-012", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-013", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-014", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-015", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-016", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-017", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-018", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-019", "verification": { "state": "not_started", "commit": null, "points": 0 } },
-    { "id": "STORY-020", "verification": { "state": "not_started", "commit": null, "points": 0 } }
+    {
+      "id": "STORY-000",
+      "release": null,
+      "acceptance_total": 5,
+      "criteria": [
+        {
+          "text": "Given the Command Center, when it is opened, then every tab is reachable and every card drills down one level.",
+          "passed": true
+        },
+        {
+          "text": "Given sample mode, when any tab is shown, then the sample data is visibly labelled as sample.",
+          "passed": true
+        },
+        {
+          "text": "Given the Command Center, when any tab renders, then .colaberry/plan.json and .colaberry/progress.json are both committed in this repo and every tab reads its content from them at runtime rather than from hard-coded values.",
+          "passed": true
+        },
+        {
+          "text": "Given the Command Center, when any tab is shown, then .colaberry/manifest.json is committed in this repo and every tab shows how old that data is and warns when the age exceeds a week.",
+          "passed": true
+        },
+        {
+          "text": "Trust — no tab shows a number, a connection or a result the project has not actually produced.",
+          "passed": true
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": 57,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-001",
+      "release": "r0",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a new company setup request, when I enter valid company details, then the company profile is created.",
+          "passed": false
+        },
+        {
+          "text": "Given a new company setup request, when I enter invalid details, then I receive an error message.",
+          "passed": false
+        },
+        {
+          "text": "Trust: The creation of a company profile is logged in the audit trail.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-002",
+      "release": "r0",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a chart of accounts setup, when I add a new account, then it appears in the chart.",
+          "passed": false
+        },
+        {
+          "text": "Given a chart of accounts setup, when I add an account with invalid data, then I receive an error message.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Changes to the chart of accounts are logged in the audit trail.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-003",
+      "release": "r0",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a journal entry form, when I enter valid debit and credit entries, then the entry is saved.",
+          "passed": false
+        },
+        {
+          "text": "Given a journal entry form, when I enter unbalanced entries, then I receive an error message.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Journal entries are logged with a timestamp and user ID.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-004",
+      "release": "r0",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a set of journal entries, when I post them, then they appear in the general ledger.",
+          "passed": false
+        },
+        {
+          "text": "Given a set of journal entries, when I post unbalanced entries, then the system prevents posting.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Posting actions are recorded in the audit trail.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-005",
+      "release": "r1",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a set of ledger entries, when I generate a trial balance, then it should display all accounts with their balances.",
+          "passed": false
+        },
+        {
+          "text": "Given an unbalanced ledger, when I attempt to generate a trial balance, then it should indicate an error.",
+          "passed": false
+        },
+        {
+          "text": "Trust: The generation of a trial balance must be logged with the user ID and timestamp.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-006",
+      "release": "r0",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a trial balance, when I generate financial statements, then they reflect the company's financial status.",
+          "passed": false
+        },
+        {
+          "text": "Given a trial balance, when there are discrepancies, then the statements highlight them.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Financial statement generation is logged with a timestamp.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-007",
+      "release": "r1",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a customer profile, when I update details, then the changes are saved.",
+          "passed": false
+        },
+        {
+          "text": "Given a vendor profile, when I delete it, then it is removed from the system.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Changes to profiles are logged in the audit trail.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-008",
+      "release": "r1",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given an invoice, when I mark it as paid, then it updates the accounts receivable.",
+          "passed": false
+        },
+        {
+          "text": "Given a bill, when I mark it as paid, then it updates the accounts payable.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Payment actions are logged in the audit trail.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-009",
+      "release": "r1",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a sales order, when I process it, then it updates the sales records.",
+          "passed": false
+        },
+        {
+          "text": "Given a purchase order, when I process it, then it updates the purchasing records.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Sales and purchasing actions are logged in the audit trail.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-010",
+      "release": "r1",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a bank transaction, when I reconcile it, then it updates the cash records.",
+          "passed": false
+        },
+        {
+          "text": "Given a cash transaction, when I record it, then it updates the cash records.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Cash and bank transactions are logged in the audit trail.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-011",
+      "release": "r2",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a budget, when I allocate funds, then it updates the cost center records.",
+          "passed": false
+        },
+        {
+          "text": "Given a cost center, when I adjust its budget, then it reflects in financial reports.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Budget and cost center changes are logged in the audit trail.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-012",
+      "release": "r2",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given financial data, when I generate a report, then it includes detailed analysis.",
+          "passed": false
+        },
+        {
+          "text": "Given financial data, when there are discrepancies, then the report highlights them.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Report generation is logged with a timestamp.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-013",
+      "release": "r3",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given multiple companies, when I switch contexts, then the system reflects the selected company.",
+          "passed": false
+        },
+        {
+          "text": "Given multiple companies, when I consolidate reports, then it includes all selected entities.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Company context switches are logged in the audit trail.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-014",
+      "release": "r3",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a user role, when I assign permissions, then it updates the user's access rights.",
+          "passed": false
+        },
+        {
+          "text": "Given a user role, when I revoke permissions, then it updates the user's access rights.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Role and permission changes are logged in the audit trail.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-015",
+      "release": "r4",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given financial data, when AI generates insights, then they are presented to the user.",
+          "passed": false
+        },
+        {
+          "text": "Given AI-generated insights, when there is uncertainty, then the system flags them for review.",
+          "passed": false
+        },
+        {
+          "text": "Trust: AI insights are logged with a timestamp and advisory status.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-016",
+      "release": "r4",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a new integration request, when I assess it, then the system supports modular addition.",
+          "passed": false
+        },
+        {
+          "text": "Given a new integration request, when it conflicts with existing modules, then the system flags it for review.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Integration assessments are logged with a timestamp.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-017",
+      "release": "r0",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a financial transaction, when it is completed, then an audit trail entry is created.",
+          "passed": false
+        },
+        {
+          "text": "Given a change to a financial transaction, when it is modified, then an audit trail entry is updated.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Given any financial transaction, when it is audited, then the audit trail shows all changes and timestamps.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-018",
+      "release": "r0",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a transaction, when it is submitted, then it is validated for balanced debit and credit entries.",
+          "passed": false
+        },
+        {
+          "text": "Given a transaction with unbalanced entries, when it is submitted, then an error message is displayed.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Given any transaction, when it is validated, then the validation result is logged.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-019",
+      "release": "r0",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given invalid accounting data, when it is entered, then an error message is displayed to the user.",
+          "passed": false
+        },
+        {
+          "text": "Given valid accounting data, when it is entered, then it is accepted without error.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Given any invalid data entry, when it is processed, then the error is logged with details.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    },
+    {
+      "id": "STORY-020",
+      "release": "r1",
+      "acceptance_total": 3,
+      "criteria": [
+        {
+          "text": "Given a dataset, when it is exported, then it is available in Excel/CSV format.",
+          "passed": false
+        },
+        {
+          "text": "Given an Excel/CSV file, when it is imported, then the data is correctly added to the system.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Given any data import/export, when it is completed, then the action is logged with a timestamp.",
+          "passed": false
+        }
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "not_started",
+        "criteria_passed": 0,
+        "criteria_total": 0,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": []
+      }
+    }
   ]
 }
