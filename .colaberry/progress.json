@@ -43,12 +43,12 @@
       "notes": null,
       "updated_at": null,
       "verification": {
-        "state": "not_started",
-        "criteria_passed": 0,
-        "criteria_total": 0,
+        "state": "submitted",
+        "criteria_passed": 5,
+        "criteria_total": 5,
         "verified_at": null,
-        "commit_sha": null,
-        "commit_url": null,
+        "commit_sha": "ccdd63eb5b93dfd11325e43d97a56088f5ffd12a",
+        "commit_url": "https://github.com/baidhani/Ledgerly-Accounting/commit/ccdd63eb5b93dfd11325e43d97a56088f5ffd12a",
         "commit_at": null,
         "points_awarded": 57,
         "outstanding": []
